@@ -1,0 +1,70 @@
+<% layout("layouts/boilerPlate") %>
+
+<div class="newForm">
+  <h3 class="text-center">New Campground</h3>
+  <form action="/campgrounds" method="post" novalidate class="validated-form">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title: </label>
+      <input
+        type="text"
+        id="title"
+        required
+        name="title"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location: </label>
+      <input
+        type="text"
+        id="location"
+        required
+        name="location"
+        class="form-control"
+      />
+      <div class="valid-feedback">Looks good!</div>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Image: </label>
+      <input
+        type="text"
+        id="image"
+        required
+        name="image"
+        class="form-control"
+        placeholder="URL"
+        name="image"
+      />
+      <div class="valid-feedback">Looks good!</div>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price: </label>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="price">₹</span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="0.00"
+          aria-label="Username"
+          aria-describedby="price"
+          name="price"
+          required
+        />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description: </label>
+      <textarea
+        type="text"
+        id="description"
+        required
+        name="description"
+        class="form-control"
+      ></textarea>
+      <div class="valid-feedback">Looks good!</div>
+    </div>
+    <button type="submit" class="btn btn-success">Add CampGround</button>
+  </form>
+</div>

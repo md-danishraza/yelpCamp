@@ -1,0 +1,108 @@
+<% layout("layouts/boilerPlate") %>
+<!-- <form action="/campgrounds/<%= camp.id %>?_method=PUT" method="post">
+  <label for="title">
+    Title:
+    <input type="text" id="title" name="title" value="<%= camp.title %>" />
+  </label>
+  <label for="location">
+    Location:
+    <input
+      type="text"
+      id="location"
+      name="location"
+      value="<%= camp.location %>"
+    />
+  </label>
+  <button type="submit">Update</button>
+  <a href="/campgrounds/<%= camp.id %>">Cancel</a>
+</form> -->
+
+<div class="newForm">
+  <h3 class="text-center">New Campground</h3>
+  <form
+    action="/campgrounds/<%= camp.id %>?_method=PUT"
+    method="post"
+    class="validated-form"
+    novalidate
+  >
+    <div class="mb-3">
+      <label for="title" class="form-label">Title: </label>
+      <input
+        type="text"
+        id="title"
+        required
+        name="title"
+        class="form-control"
+        value="<%= camp.title %>"
+      />
+      <div class="invalid-feedback">Title is required.</div>
+      <div class="valid-feedback">Looks good.</div>
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location: </label>
+      <input
+        type="text"
+        id="location"
+        required
+        name="location"
+        class="form-control"
+        value="<%= camp.location %>"
+      />
+
+      <div class="valid-feedback">Looks good.</div>
+      <div class="invalid-feedback">Location is required.</div>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Image: </label>
+      <input
+        type="text"
+        id="image"
+        required
+        name="image"
+        class="form-control"
+        placeholder="URL"
+        value="<%= camp.image %>"
+      />
+      <div class="invalid-feedback">image URL is required.</div>
+      <div class="valid-feedback">Looks good.</div>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price: </label>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="price">₹</span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="0.00"
+          aria-label="price"
+          aria-describedby="price"
+          value="<%= camp.price %>"
+          name="price"
+          required
+        />
+        <div class="invalid-feedback">Price is required.</div>
+        <div class="valid-feedback">Looks good.</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description: </label>
+      <textarea
+        type="text"
+        id="description"
+        required
+        class="form-control"
+        name="description"
+      >
+      <%= camp.description %></textarea
+      >
+      <div class="invalid-feedback">Description is required.</div>
+      <div class="valid-feedback">Looks good.</div>
+    </div>
+    <button type="submit" class="btn btn-info mx-auto d-block">
+      Update CampGround
+    </button>
+    <a href="/campgrounds/<%= camp.id %>" class="btn btn-success mx-auto w-auto"
+      >Cancel</a
+    >
+  </form>
+</div>
