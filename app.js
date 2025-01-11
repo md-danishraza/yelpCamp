@@ -3,6 +3,16 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const engine = require("ejs-mate");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+
+// models
+const User = require("./models/user");
+
+// routes
+const campgroundRoutes = require("./routes/campground");
+const reviewRoutes = require("./routes/review");
+const userRoutes = require("./routes/user");
 
 // session
 const session = require("express-session");
@@ -18,11 +28,25 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 
+// initializing passport
+app.use(passport.initialize());
+// for persistence login (after session middleware)
+app.use(passport.session());
+// using localstrategy
+passport.use(new localStrategy(User.authenticate()));
+
+// how to store it in session
+passport.serializeUser(User.serializeUser());
+// how to unstore it in session
+passport.deserializeUser(User.deserializeUser());
+
 // flash
 const flash = require("connect-flash");
 app.use(flash());
 // setting middleware for flash
 app.use((req, res, next) => {
+  // console.log(req.session);
+  res.locals.currentUser = req.user; // current logged in user
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
 
@@ -60,10 +84,19 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-const campgroundRoutes = require("./routes/campground");
+app.get("/fakeUser", async (req, res) => {
+  const user = new User({
+    email: "fakeuser@gmail.com",
+    username: "FakeUser",
+  });
+  const newUser = await User.register(user, "fakepassword");
+  res.send(newUser);
+});
+
+app.use("/", userRoutes);
+
 app.use("/campgrounds", campgroundRoutes);
 
-const reviewRoutes = require("./routes/review");
 app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 // if no url is matched

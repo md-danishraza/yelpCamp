@@ -34,3 +34,11 @@ h1 {
 .card {
   box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.5);
 }
+
+@media (min-width: 768px) {
+  img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Adjust to 'contain' if you prefer preserving the aspect ratio */
+  }
+}

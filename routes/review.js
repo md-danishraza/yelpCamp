@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
+const { isLoggedIn, storeReturnTo } = require("../middleware");
 
 // importing our validationSchemas
 const validationSchemas = require("../validationSchemas");
@@ -26,6 +27,7 @@ const validateReview = (req, res, next) => {
 // review submission
 router.post(
   "/",
+
   validateReview,
   wrapAsync(async (req, res) => {
     const { id } = req.params;

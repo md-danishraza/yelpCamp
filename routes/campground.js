@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
+const { isLoggedIn } = require("../middleware");
 
 // importing our validationSchemas
 const validationSchemas = require("../validationSchemas");
@@ -24,18 +25,20 @@ const validateCampground = (req, res, next) => {
 
 router.get(
   "/",
+
   wrapAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index", { campgrounds });
   })
 );
 // new form
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("campgrounds/new");
 });
 // post for form submission
 router.post(
   "/",
+  isLoggedIn,
   validateCampground,
   wrapAsync(async (req, res) => {
     const { title, price, description, location, image } = req.body;
@@ -68,6 +71,7 @@ router.get(
 // edit
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
@@ -81,6 +85,7 @@ router.get(
 // handle edit put form
 router.put(
   "/:id",
+  isLoggedIn,
   validateCampground,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
@@ -97,6 +102,7 @@ router.put(
 // delete
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async function (req, res) {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
