@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-const { isLoggedIn, storeReturnTo } = require("../middleware");
-
-// importing our validationSchemas
-const validationSchemas = require("../validationSchemas");
+const { validateReview, isLoggedIn, isReviewAuthor } = require("../middleware");
 
 // importing custom errors
 const appError = require("../utlis/appError");
@@ -13,21 +10,10 @@ const wrapAsync = require("../utlis/wrapAsync");
 const Campground = require("../models/campground");
 const Review = require("../models/review");
 
-// middleware for validation
-const validateReview = (req, res, next) => {
-  const { error } = validationSchemas.reviewSchema.validate(req.body);
-  if (error) {
-    throw new appError(error.details[0].message, 400);
-  } else {
-    // passing to next middleware
-    next();
-  }
-};
-
 // review submission
 router.post(
   "/",
-
+  isLoggedIn,
   validateReview,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
@@ -35,6 +21,7 @@ router.post(
 
     const camp = await Campground.findById(id);
     const newReview = new Review({ body, rating });
+    newReview.author = req.user._id;
 
     camp.reviews.push(newReview);
     await camp.save();
@@ -46,6 +33,8 @@ router.post(
 // deleting review
 router.delete(
   "/:review_id",
+  isLoggedIn,
+  isReviewAuthor,
   wrapAsync(async (req, res) => {
     const { id, review_id } = req.params;
     await Review.findByIdAndDelete(review_id);

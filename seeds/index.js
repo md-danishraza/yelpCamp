@@ -29,6 +29,7 @@ const saveDB = async () => {
         image: `https://picsum.photos/500/300?random=${Math.random()}`,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae metus id est scelerisque semper vel vel risus. Nulla facilisi. Sed at velit vel felis luctus fermentum. Nulla facilisi. Sed vitae metus id est scelerisque semper vel vel risus. Nulla facilisi. Sed at velit vel felis luctus fermentum. Nulla facilisi. Sed vitae metus id est scelerisque semper vel vel`,
         price: Math.floor(Math.random() * 100) + 10,
+        author: "678206b4677a747e753bb6b8",
       });
       await camp.save();
     }
