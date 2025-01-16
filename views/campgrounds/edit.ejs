@@ -1,12 +1,13 @@
 <% layout("layouts/boilerPlate") %>
 
-<div class="newForm">
+<div class="newForm editForm">
   <h3 class="text-center">Edit Campground</h3>
   <form
     action="/campgrounds/<%= camp.id %>?_method=PUT"
     method="post"
     class="validated-form"
     novalidate
+    enctype="multipart/form-data"
   >
     <div class="mb-3">
       <label for="title" class="form-label">Title: </label>
@@ -36,18 +37,8 @@
       <div class="invalid-feedback">Location is required.</div>
     </div>
     <div class="mb-3">
-      <label for="image" class="form-label">Image: </label>
-      <input
-        type="text"
-        id="image"
-        required
-        name="image"
-        class="form-control"
-        placeholder="URL"
-        value="<%= camp.image %>"
-      />
-      <div class="invalid-feedback">image URL is required.</div>
-      <div class="valid-feedback">Looks good.</div>
+      <label for="image">Add More Images:- </label>
+      <input type="file" name="image" multiple id="image" />
     </div>
     <div class="mb-3">
       <label for="price" class="form-label">Price: </label>
@@ -80,6 +71,20 @@
       >
       <div class="invalid-feedback">Description is required.</div>
       <div class="valid-feedback">Looks good.</div>
+    </div>
+    <div class="mb-3">
+      <% camp.images.forEach(function(img, i){ %>
+      <img src="<%= img.thumbnail %>" />
+      <div class="form-check-inline">
+        <input
+          type="checkbox"
+          name="deleteImages[]"
+          value="<%= img.filename %>"
+          id="image-<%= i %>"
+        />
+        <label for="image-<%= i %>">Delete?</label>
+      </div>
+      <% }) %>
     </div>
     <button type="submit" class="btn btn-info mx-auto d-block">
       Update CampGround

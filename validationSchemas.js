@@ -5,7 +5,13 @@ module.exports.campgroundSchema = joi.object({
   price: joi.number().min(0).required(),
   description: joi.string().required(),
   location: joi.string().required(),
-  image: joi.string().required(),
+  // image: joi.array().items(
+  //   joi.object({
+  //     url: joi.string().required(),
+  //     filename: joi.string().required(),
+  //   })
+  // ),
+  deleteImages: joi.array(),
 });
 
 module.exports.reviewSchema = joi.object({

@@ -2,6 +2,12 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const { isLoggedIn, isAuthor, validateCampground } = require("../middleware");
 
+const { storage } = require("../cloudinary");
+
+// multer
+const multer = require("multer");
+const upload = multer({ storage });
+
 // campgrounds controller
 const campground = require("../controllers/campground");
 
@@ -19,7 +25,12 @@ router
   .route("/")
   .get(wrapAsync(campground.index))
   // post for form submission
-  .post(isLoggedIn, validateCampground, wrapAsync(campground.createCampground));
+  .post(
+    isLoggedIn,
+    upload.array("image"),
+    validateCampground,
+    wrapAsync(campground.createCampground)
+  );
 
 // edit
 router.get(
@@ -36,6 +47,7 @@ router
   .put(
     isLoggedIn,
     isAuthor,
+    upload.array("image"),
     validateCampground,
     wrapAsync(campground.updateCampground)
   )

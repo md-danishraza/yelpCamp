@@ -42,3 +42,10 @@ h1 {
     object-fit: cover !important; /* Adjust to 'contain' if you prefer preserving the aspect ratio */
   }
 }
+
+.editForm {
+  img {
+    width: auto !important;
+    object-fit: auto !important;
+  }
+}
