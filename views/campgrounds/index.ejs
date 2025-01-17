@@ -5,7 +5,14 @@
 <div class="card mb-4">
   <div class="row">
     <div class="col-md-4">
+      <% if (camp.images.length){ %>
       <img src="<%= camp.images[0].url %>" class="img-fluid" />
+      <% } else { %>
+      <img
+        src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1737094181~exp=1737097781~hmac=7a2fa410e52f2c32873d9a4d4ebfc5d6ca6db3214ece0a0e580f9955f9234a84&w=1380"
+        class="img-fluid"
+      />
+      <% } %>
     </div>
     <div class="col-md-8">
       <div class="card-body">

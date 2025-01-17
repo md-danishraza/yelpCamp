@@ -29,6 +29,10 @@ const saveDB = async () => {
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae metus id est scelerisque semper vel vel risus. Nulla facilisi. Sed at velit vel felis luctus fermentum. Nulla facilisi. Sed vitae metus id est scelerisque semper vel vel risus. Nulla facilisi. Sed at velit vel felis luctus fermentum. Nulla facilisi. Sed vitae metus id est scelerisque semper vel vel`,
         price: Math.floor(Math.random() * 100) + 10,
         author: "678206b4677a747e753bb6b8",
+        geometry: {
+          type: "Point",
+          coordinates: [-113.1331, 47.0202],
+        },
         // image: `https://picsum.photos/500/300?random=${Math.random()}`
         images: [
           {

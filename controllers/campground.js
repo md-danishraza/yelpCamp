@@ -2,6 +2,9 @@
 const Campground = require("../models/campground");
 // cloudinary
 const { cloudinary } = require("../cloudinary");
+// maptiler
+const maptilerClient = require("@maptiler/client");
+maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 module.exports.index = async (req, res) => {
   const campgrounds = await Campground.find({});
@@ -22,6 +25,12 @@ module.exports.createCampground = async (req, res) => {
     description,
     location,
   });
+  // geocoding to get lat and lng
+  const geoData = await maptilerClient.geocoding.forward(location, {
+    limit: 1,
+  });
+  newCampground.geometry = geoData.features[0].geometry;
+
   newCampground.images = req.files.map((f) => ({
     url: f.path,
     filename: f.filename,
@@ -71,6 +80,11 @@ module.exports.updateCampground = async (req, res) => {
     { title, price, description, location },
     { new: true, runValidators: true }
   );
+  // geocoding to get lat and lng
+  const geoData = await maptilerClient.geocoding.forward(location, {
+    limit: 1,
+  });
+  camp.geometry = geoData.features[0].geometry;
 
   const images = req.files.map((f) => ({
     url: f.path,

@@ -2,6 +2,7 @@
 .rating-form {
   width: 100%;
   max-width: 500px;
+
   margin: 0 auto;
   box-sizing: border-box;
   border: 1px solid black;
@@ -39,7 +40,17 @@ h1 {
   img {
     width: 100% !important;
     height: 100% !important;
+
+    max-height: 300px !important;
+
     object-fit: cover !important; /* Adjust to 'contain' if you prefer preserving the aspect ratio */
+  }
+
+  .newForm {
+    max-width: 500px;
+  }
+  .rating-form {
+    max-width: 600px;
   }
 }
 
