@@ -1,3 +1,40 @@
-<% layout("layouts/boilerPlate") %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+  </head>
+  <body>
+    <div class="homepage">
+      <div class="navbar">
+        <div>
+          <img src="assets/orangeLogo.png" alt="" class="homepage-logo" />
+        </div>
+        <div class="navigations">
+          <a class="active" href="/campgrounds">Home</a>
+          <a class=" " href="/campgrounds">Campgrounds</a>
+          <% if(!currentUser){ %>
+          <a class="" href="/login">Login</a>
+          <a class="" href="/register">Register</a>
+          <% } %> <% if (currentUser){ %>
 
-<h1>Welcome Home</h1>
+          <a class="" href="/campgrounds/new">New Camp</a>
+          <a class="" href="/logout">Logout</a>
+          <% } %>
+        </div>
+      </div>
+      <div class="content">
+        <h1>Welcome Home</h1>
+        <p>
+          This is a YelpCamp application, where users can create, read, update,
+          and delete campgrounds. Sign up or login to start exploring the world
+          of camping!
+        </p>
+      </div>
+    </div>
+
+    <script src="../javascripts/client.js"></script>
+  </body>
+</html>

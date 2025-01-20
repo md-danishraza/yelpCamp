@@ -1,24 +1,33 @@
 <% layout("layouts/boilerPlate") %>
 <h1>All Campgrounds</h1>
+<div id="cluster-map"></div>
 
 <% for (let camp of campgrounds){ %>
 <div class="card mb-4">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 p-0 m-0">
       <% if (camp.images.length){ %>
-      <img src="<%= camp.images[0].url %>" class="img-fluid" />
+      <img
+        src="<%= camp.images[0].url %>"
+        class="indexImg"
+        crossorigin="anonymous"
+      />
       <% } else { %>
       <img
         src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1737094181~exp=1737097781~hmac=7a2fa410e52f2c32873d9a4d4ebfc5d6ca6db3214ece0a0e580f9955f9234a84&w=1380"
-        class="img-fluid"
+        class="indexImg"
+        crossorigin="anonymous"
       />
       <% } %>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-8 p-0">
       <div class="card-body">
         <h5 class="card-title"><%= camp.title %></h5>
-        <p class="card-text"><%= camp.description %></p>
-        <small class="card-text text-secondary"><%= camp.location %></small>
+        <p class="card-text mb-2">
+          <%= camp.description %>
+          <br />
+          <small class="text-secondary"><%= camp.location %></small>
+        </p>
         <p class="card-text">
           <a href="/campgrounds/<%= camp._id %>" class="btn btn-primary"
             >Expand</a
@@ -30,4 +39,9 @@
 </div>
 <% } %>
 
-<h2><a href="/campgrounds/new">New Camp</a></h2>
+<script>
+  const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+  const campgrounds = { features: <%- JSON.stringify(campgrounds) %>}
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>

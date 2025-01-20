@@ -1,10 +1,11 @@
 <% layout("layouts/boilerPlate") %>
 
 <div class="newForm">
+  <img src="../../assets/login.jpg" alt="" />
   <h3 class="text-center">Login</h3>
   <form action="/login" method="post" novalidate class="validated-form">
     <div class="mb-3">
-      <label for="username" class="form-label">UserName: </label>
+      <label for="username" class="form-label">Username: </label>
       <input
         type="text"
         id="username"
@@ -25,7 +26,8 @@
       />
       <div class="valid-feedback">Looks good!</div>
     </div>
-
-    <button type="submit" class="btn btn-success">Login</button>
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-success">Login</button>
+    </div>
   </form>
 </div>

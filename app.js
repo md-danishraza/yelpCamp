@@ -10,6 +10,8 @@ const mongoose = require("mongoose");
 const engine = require("ejs-mate");
 const passport = require("passport");
 const localStrategy = require("passport-local");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 // models
 const User = require("./models/user");
@@ -22,12 +24,14 @@ const userRoutes = require("./routes/user");
 // session
 const session = require("express-session");
 const sessionConfig = {
+  name: "yelp-session",
   secret: "mysecretsession",
   resave: false,
   saveUninitialized: true,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
+    // secure:true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
   },
 };
@@ -48,6 +52,49 @@ passport.deserializeUser(User.deserializeUser());
 // flash
 const flash = require("connect-flash");
 app.use(flash());
+
+// helmet
+app.use(helmet());
+
+const scriptSrcUrls = [
+  "https://stackpath.bootstrapcdn.com/",
+  "https://kit.fontawesome.com/",
+  "https://cdnjs.cloudflare.com/",
+  "https://cdn.jsdelivr.net",
+  "https://cdn.maptiler.com/",
+];
+const styleSrcUrls = [
+  "https://kit-free.fontawesome.com/",
+  "https://stackpath.bootstrapcdn.com/",
+  "https://fonts.googleapis.com/",
+  "https://use.fontawesome.com/",
+  "https://cdn.jsdelivr.net",
+  "https://cdn.maptiler.com/",
+];
+const connectSrcUrls = ["https://api.maptiler.com/"];
+const fontSrcUrls = ["https://fonts.gstatic.com/"];
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        "https://res.cloudinary.com/dykphe12x/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+        "https://images.unsplash.com/",
+        "https://api.maptiler.com/",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
+
 // setting middleware for flash
 app.use((req, res, next) => {
   // console.log(req.session);
@@ -57,7 +104,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
 // importing custom errors
 const appError = require("./utlis/appError");
 const wrapAsync = require("./utlis/wrapAsync");
@@ -66,6 +112,9 @@ const wrapAsync = require("./utlis/wrapAsync");
 app.use(express.static(path.join(__dirname, "public")));
 // middleware to parse the request body
 app.use(express.urlencoded({ extended: true }));
+
+// To remove data using these defaults:
+app.use(mongoSanitize());
 
 const methodOverride = require("method-override");
 // Override HTTP methods using the `_method` query parameter

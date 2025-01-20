@@ -4,39 +4,46 @@
 
 <div class="row row-gap-5">
   <div class="col-md-6">
-    <!-- carousel start -->
-
-    <div id="campgroundCarousel" class="carousel slide">
-      <div class="carousel-inner">
-        <% camp.images.forEach((img,i) => { %>
-        <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
-          <img class="d-block w-100" src="<%= img.url %>" alt="First slide" />
-        </div>
-        <% }) %>
-      </div>
-      <% if (camp.images.length > 1){ %>
-      <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#campgroundCarousel"
-        data-bs-slide="prev"
-      >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#campgroundCarousel"
-        data-bs-slide="next"
-      >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-      <% } %>
-    </div>
-    <!-- carousel end -->
     <div class="card">
+      <div class="card-img-top">
+        <!-- carousel start -->
+
+        <div id="campgroundCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            <% camp.images.forEach((img,i) => { %>
+            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+              <img
+                class="d-block w-100"
+                src="<%= img.url %>"
+                alt="First slide"
+                crossorigin="anonymous"
+              />
+            </div>
+            <% }) %>
+          </div>
+          <% if (camp.images.length > 1){ %>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#campgroundCarousel"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#campgroundCarousel"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <% } %>
+        </div>
+        <!-- carousel end -->
+      </div>
       <div class="card-body">
         <h5 class="card-title"><%= camp.title %></h5>
         <p class="card-text"><%= camp.description %></p>
@@ -55,7 +62,7 @@
         ){ %>
         <a
           href="/campgrounds/<%= camp._id %>/edit"
-          class="card-link btn btn-warning text-white"
+          class="card-link btn btn-warning text-white m-0"
           >Edit</a
         >
         <form
@@ -71,7 +78,7 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div id="map" style="width: 100%; height: 300px"></div>
+    <div id="map" class="mb-4"></div>
     <% if (currentUser){ %>
     <form
       action="/campgrounds/<%= camp._id%>/reviews"
@@ -79,7 +86,7 @@
       class="rating-form validated-form"
       novalidate
     >
-      <h2 class="mb-3">Leave a review.</h2>
+      <h5 class="mb-3">Leave a review.</h5>
       <label for="rating" class="form-label">Rating:</label>
       <fieldset class="starability-basic">
         <input
@@ -125,7 +132,7 @@
           Rated:<%=review.rating %> stars
         </p>
         <p class="card-text"><%= review.body %></p>
-        <p class="card-text">By :- <%= review.author.username %></p>
+
         <% if(currentUser && review.author.username == currentUser.username){ %>
         <form
           action="/campgrounds/<%= camp._id %>/reviews/<%= review._id %>?_method=DELETE"
