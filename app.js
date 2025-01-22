@@ -13,6 +13,9 @@ const localStrategy = require("passport-local");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 
+const dbUrl = process.env.DB_URL;
+// const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp";
+
 // models
 const User = require("./models/user");
 
@@ -23,15 +26,26 @@ const userRoutes = require("./routes/user");
 
 // session
 const session = require("express-session");
+const mongoStore = require("connect-mongo")(session);
+
+const sessionSecret = process.env.SESSIONSECRET;
+const store = new mongoStore({
+  url: dbUrl,
+  secret: sessionSecret,
+  touchAfter: 24 * 60 * 60, // time in seconds before session is refreshed
+});
+store.on("error", (err) => console.log("session store error", err));
+
 const sessionConfig = {
+  store: store,
   name: "yelp-session",
-  secret: "mysecretsession",
+  secret: sessionSecret,
   resave: false,
   saveUninitialized: true,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
-    // secure:true,
+    secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
   },
 };
@@ -128,7 +142,7 @@ app.set("view engine", "ejs");
 
 // connecting to mongodb
 mongoose
-  .connect("mongodb://127.0.0.1:27017/yelp-camp")
+  .connect(dbUrl)
   .then(() => {
     console.log("Connected to MongoDB");
   })
@@ -136,15 +150,6 @@ mongoose
 
 app.get("/", (req, res) => {
   res.render("home");
-});
-
-app.get("/fakeUser", async (req, res) => {
-  const user = new User({
-    email: "fakeuser@gmail.com",
-    username: "FakeUser",
-  });
-  const newUser = await User.register(user, "fakepassword");
-  res.send(newUser);
 });
 
 app.use("/", userRoutes);
@@ -164,6 +169,8 @@ app.use((err, req, res, next) => {
   // res.send("something went wrong");
   res.status(status || 500).render("error", { message, status, err });
 });
-app.listen(3000, () => {
-  console.log("Server is running on port 3000"); // logs the server has started on port 3000
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log("Server is running on port" + port); // logs the server has started on port 3000
 });
