@@ -40,6 +40,7 @@ const store = MongoStore.create({
 });
 store.on("error", (err) => console.log("session store error", err));
 
+app.set("trust proxy", 1); // Trust Render's proxy
 const sessionConfig = {
   store: store,
   name: "yelp-session",
@@ -47,10 +48,10 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    sameSite: "lax", // Prevent CSRF while allowing cookies in same-site requests
   },
 };
 app.use(session(sessionConfig));
