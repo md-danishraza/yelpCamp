@@ -31,7 +31,7 @@ module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
 
   const camp = await Campground.findById(id);
-  console.log(camp);
+  // console.log(camp);
   if (!camp.author.equals(req.user._id)) {
     req.flash("error", "You are not authorized to do that!!");
     return res.redirect(`/campgrounds/${id}`);

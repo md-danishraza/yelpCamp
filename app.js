@@ -26,13 +26,17 @@ const userRoutes = require("./routes/user");
 
 // session
 const session = require("express-session");
-const mongoStore = require("connect-mongo")(session);
+const MongoStore = require("connect-mongo");
 
 const sessionSecret = process.env.SESSIONSECRET;
-const store = new mongoStore({
-  url: dbUrl,
-  secret: sessionSecret,
-  touchAfter: 24 * 60 * 60, // time in seconds before session is refreshed
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  // time in seconds before session is refreshed
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: sessionSecret,
+  },
 });
 store.on("error", (err) => console.log("session store error", err));
 
@@ -45,7 +49,7 @@ const sessionConfig = {
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
   },
 };
@@ -172,5 +176,5 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log("Server is running on port" + port); // logs the server has started on port 3000
+  console.log("Server is running on port " + port); // logs the server has started on port 3000
 });
