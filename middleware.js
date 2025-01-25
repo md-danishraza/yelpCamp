@@ -31,13 +31,18 @@ module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
 
   const camp = await Campground.findById(id);
-  // console.log(camp);
-  if (!camp.author.equals(req.user._id)) {
+  // // console.log(camp);
+  // if (!camp.author.equals(req.user._id) && currentUser.username !== "danish") {
+  //   req.flash("error", "You are not authorized to do that!!");
+  //   return res.redirect(`/campgrounds/${id}`);
+  // }
+
+  if (camp.author.equals(req.user._id) || req.user.username == "danish") {
+    next();
+  } else {
     req.flash("error", "You are not authorized to do that!!");
     return res.redirect(`/campgrounds/${id}`);
   }
-
-  next();
 };
 
 // middleware for validation
@@ -66,10 +71,10 @@ module.exports.validateReview = (req, res, next) => {
 module.exports.isReviewAuthor = async (req, res, next) => {
   const { id, review_id } = req.params;
   const review = await Review.findById(review_id);
-  if (!review.author.equals(req.user._id)) {
+  if (review.author.equals(req.user._id) || req.user.username == "danish") {
+    next();
+  } else {
     req.flash("error", "You are not authorized to do that!!");
     return res.redirect(`/campgrounds/${id}`);
   }
-
-  next();
 };
